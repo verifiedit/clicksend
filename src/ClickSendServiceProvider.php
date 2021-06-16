@@ -1,10 +1,10 @@
 <?php
 
-namespace NotificationChannels\:channel_namespace;
+namespace NotificationChannels\ClickSend;
 
 use Illuminate\Support\ServiceProvider;
 
-class :service_nameServiceProvider extends ServiceProvider
+class ClickSendServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.

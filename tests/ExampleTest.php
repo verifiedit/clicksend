@@ -1,6 +1,6 @@
 <?php
 
-namespace NotificationChannels\:channel_namespace\Test;
+namespace NotificationChannels\ClickSend\Test;
 
 use PHPUnit\Framework\TestCase;
 

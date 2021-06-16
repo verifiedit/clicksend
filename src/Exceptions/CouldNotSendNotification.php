@@ -1,8 +1,10 @@
 <?php
 
-namespace NotificationChannels\:channel_namespace\Exceptions;
+namespace NotificationChannels\ClickSend\Exceptions;
 
-class CouldNotSendNotification extends \Exception
+use Exception;
+
+class CouldNotSendNotification extends Exception
 {
     public static function serviceRespondedWithAnError($response)
     {
