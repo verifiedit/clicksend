@@ -2,14 +2,11 @@ Please see [this repo](https://github.com/laravel-notification-channels/channels
 
 # A Boilerplate repo for contributions
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-notification-channels/clicksend.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/clicksend)
+[![Packagist Version (including pre-releases)](https://img.shields.io/packagist/v/verifiedit/laravel-notification-channel-clicksend?include_prereleases&style=flat-square)](https://packagist.org/packages/verifiedit/laravel-notification-channel-clicksend)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/laravel-notification-channels/clicksend/master.svg?style=flat-square)](https://travis-ci.org/laravel-notification-channels/clicksend)
+[![PHPUnit tests](https://github.com/verifiedit/clicksend/actions/workflows/tests.yml/badge.svg)](https://github.com/verifiedit/clicksend/actions/workflows/tests.yml)
 [![StyleCI](https://styleci.io/repos/377355997/shield)](https://styleci.io/repos/377355997)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/d3213ca0-b974-4d00-8843-16a496116569.svg?style=flat-square)](https://insight.sensiolabs.com/projects/d3213ca0-b974-4d00-8843-16a496116569)
-[![Quality Score](https://img.shields.io/scrutinizer/g/laravel-notification-channels/clicksend.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/clicksend)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/laravel-notification-channels/clicksend/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/clicksend/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel-notification-channels/clicksend.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/clicksend)
+[![Total Downloads](https://img.shields.io/packagist/dt/verifiedit/laravel-notification-channel-clicksend.svg?style=flat-square)](https://packagist.org/packages/verifiedit/laravel-notification-channel-clicksend)
 
 This package makes it easy to send notifications using [ClickSend](https://www.clicksend.com/) with Laravel 5.5+, 6.x, 7.x and 8.x
 
