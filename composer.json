@@ -1,7 +1,7 @@
 {
-    "name": "laravel-notification-channels/clicksend",
+    "name": "verifiedit/laravel-notification-channel-clicksend",
     "description": "ClickSend notification channel for Laravel",
-    "homepage": "https://github.com/laravel-notification-channels/clicksend",
+    "homepage": "https://github.com/verifiedit/clicksend",
     "license": "MIT",
     "authors": [
         {
@@ -12,8 +12,13 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
+        "ext-json": "*",
+        "clicksend/clicksend-php": "~5.0",
+        "illuminate/config": "5.8.*|^6.0|^7.0|^8.0",
+        "illuminate/events": "5.8.*|^6.0|^7.0|^8.0",
         "illuminate/notifications": "~6.0 || ~7.0 || ~8.0",
+        "illuminate/queue": "5.8.*|^6.0|^7.0|^8.0",
         "illuminate/support": "~6.0 || ~7.0 || ~8.0"
     },
     "require-dev": {
@@ -27,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "NotificationChannels\\ClickSend\\Test\\": "tests"
+            "Tests\\NotificationChannels\\ClickSend\\": "tests"
         }
     },
     "scripts": {
