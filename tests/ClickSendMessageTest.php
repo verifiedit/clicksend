@@ -13,4 +13,19 @@ class ClickSendMessageTest extends TestCase
 
         $this->assertEquals('message', $message->getContent());
     }
+
+    public function testCanSetFromOnMessage()
+    {
+        $message = new ClickSendMessage('message');
+        $message->setFrom('from');
+
+        $this->assertEquals('from', $message->getFrom());
+    }
+
+    public function testFromSetToNullByDefault()
+    {
+        $message = new ClickSendMessage('message');
+
+        $this->assertNull($message->getFrom());
+    }
 }

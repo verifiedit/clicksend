@@ -61,8 +61,10 @@ class ClickSendApi
      */
     public function sendSms(string $to, ClickSendMessage $message): array
     {
+        $from = $message->getFrom() ?? $this->smsFrom;
+
         $data = [
-            'from' => $this->smsFrom,
+            'from' => $from,
             'to' => $to,
             'body' => $message->getContent(),
         ];

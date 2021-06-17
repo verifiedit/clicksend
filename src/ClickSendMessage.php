@@ -12,6 +12,11 @@ class ClickSendMessage
     private $content;
 
     /**
+     * @var string
+     */
+    private $from;
+
+    /**
      * @param string $content
      */
     public function __construct(string $content)
@@ -37,5 +42,21 @@ class ClickSendMessage
         $this->content = $content;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFrom(): ?string
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param string $from
+     */
+    public function setFrom(string $from): void
+    {
+        $this->from = $from;
     }
 }
