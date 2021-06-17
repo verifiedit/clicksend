@@ -110,7 +110,6 @@ class ClickSendApi
         return $result;
     }
 
-
     /**
      * Return Client for accessing all other api functions.
      *

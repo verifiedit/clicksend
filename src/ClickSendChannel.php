@@ -57,7 +57,7 @@ class ClickSendChannel
      */
     public function send($notifiable, Notification $notification): array
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return [];
         }
 
@@ -65,7 +65,7 @@ class ClickSendChannel
             $notifiable->routes['notification_for_click_send'] :
             $notifiable->routeNotificationForClicksend();
 
-        if (!$to) {
+        if (! $to) {
             throw CouldNotSendNotification::missingRecipient();
         }
 
@@ -80,7 +80,7 @@ class ClickSendChannel
         try {
             $result = $this->client->sendSms($message);
 
-            if (empty($result['success']) || !$result['success']) {
+            if (empty($result['success']) || ! $result['success']) {
                 $this->events->dispatch(
                     new NotificationFailed($notifiable, $notification, get_class($this), $result)
                 );
