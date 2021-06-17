@@ -95,11 +95,14 @@ class ClickSendChannel
         } catch (Exceptions\CouldNotSendNotification $e) {
             $this->events->dispatch(
                 new NotificationFailed(
-                    $notifiable, $notification, get_class($this), [
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                    'data' => [],
-                ]
+                    $notifiable,
+                    $notification,
+                    get_class($this),
+                    [
+                        'success' => false,
+                        'message' => $e->getMessage(),
+                        'data' => [],
+                    ]
                 )
             );
 
@@ -116,14 +119,14 @@ class ClickSendChannel
      */
     public function getMessage($notifiable, Notification $notification): string
     {
-        if (!method_exists($notification, 'getMessage')) {
-            throw new Exception('The method getMessage() does not exists on ' . get_class($notification));
+        if (! method_exists($notification, 'getMessage')) {
+            throw new Exception('The method getMessage() does not exists on '.get_class($notification));
         }
 
         $message = $notification->getMessage($notifiable);
 
-        if (!is_string($message)) {
-            throw new Exception('getMessage() on ' . get_class($notification) . ' did not return string');
+        if (! is_string($message)) {
+            throw new Exception('getMessage() on '.get_class($notification).' did not return string');
         }
 
         return $message;
@@ -136,7 +139,7 @@ class ClickSendChannel
      */
     public function updateClickSendMessage(ClickSendMessage $message, Notification $notification): ClickSendMessage
     {
-        if (!method_exists($notification, 'updateClickSendMessage')) {
+        if (! method_exists($notification, 'updateClickSendMessage')) {
             return $message;
         }
 
@@ -149,9 +152,9 @@ class ClickSendChannel
      */
     public function checkPrefix(string $to): string
     {
-        if (!empty($this->prefix)) {
+        if (! empty($this->prefix)) {
             if (substr($to, 0, strlen($this->prefix)) !== $this->prefix) {
-                return $this->prefix . $to;
+                return $this->prefix.$to;
             }
         }
 

@@ -12,7 +12,7 @@ use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
 use Throwable;
 
 /**
- * Click Send API using ClickSend API wrapper
+ * Click Send API using ClickSend API wrapper.
  *
  * @url https://github.com/ClickSend/clicksend-php
  */
@@ -112,7 +112,7 @@ class ClickSendApi
 
 
     /**
-     * Return Client for accessing all other api functions
+     * Return Client for accessing all other api functions.
      *
      * @return SMSApi
      */

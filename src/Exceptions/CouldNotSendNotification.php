@@ -41,7 +41,7 @@ class CouldNotSendNotification extends Exception
     }
 
     /**
-     * Thrown when message status is not SUCCESS
+     * Thrown when message status is not SUCCESS.
      *
      * @param ApiException $e
      *

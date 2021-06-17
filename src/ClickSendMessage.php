@@ -30,9 +30,9 @@ class ClickSendMessage
      */
     public function __construct(string $to, string $content, ?string $from = null)
     {
-        $this->to      = $to;
+        $this->to = $to;
         $this->content = $content;
-        $this->from    = $from;
+        $this->from = $from;
     }
 
     /**
