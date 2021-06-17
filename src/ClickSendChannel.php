@@ -75,7 +75,7 @@ class ClickSendChannel
      */
     public function getMessage($notifiable, Notification $notification): ClickSendMessage
     {
-        if (!method_exists($notification, 'toClickSend')) {
+        if (! method_exists($notification, 'toClickSend')) {
             throw new Exception('The method toClickSend() does not exists on '.get_class($notification));
         }
 
