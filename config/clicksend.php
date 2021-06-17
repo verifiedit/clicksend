@@ -24,12 +24,5 @@ return [
     /**
      * ClickSend Send From.
      */
-    'sms-from'  => env('CLICKSEND_SMS_FROM', ''),
-
-    /**
-     * ClickSend enforced prefix
-     * For example +1
-     * This should only be used if you are absolutely sure every `to` will need this prefix.
-     */
-    'prefix'  => env('CLICKSEND_PREFIX', ''),
+    'from'  => env('CLICKSEND_SMS_FROM', ''),
 ];

@@ -48,7 +48,6 @@ class ClickSendChannelTest extends MockeryTestCase
                 return new Repository(
                     [
                         'clicksend.enabled' => true,
-                        'clicksend.prefix' => '',
                         'clicksend.driver' => 'clicksend',
                     ]
                 );
@@ -57,7 +56,7 @@ class ClickSendChannelTest extends MockeryTestCase
 
         $api = Mockery::mock(SMSApi::class);
         $this->api = Mockery::mock(ClickSendApi::class, [$api, 'from', 'clicksend']);
-        $this->channel = new ClickSendChannel($this->api, $app->make('events'), $app->make('config'));
+        $this->channel = new ClickSendChannel($this->api, $app->make('events'));
     }
 
     /**
@@ -72,6 +71,9 @@ class ClickSendChannelTest extends MockeryTestCase
             ->withArgs(
                 function ($arg) {
                     if ($arg instanceof ClickSendMessage) {
+                        return true;
+                    }
+                    if (is_string($arg)) {
                         return true;
                     }
 
@@ -103,24 +105,6 @@ class ClickSendChannelTest extends MockeryTestCase
 
         Mockery::mock(ClickSendApi::class, [Mockery::mock(SMSApi::class), 'from', 'bad']);
     }
-
-    /**
-     * @covers \NotificationChannels\ClickSend\ClickSendChannel::checkPrefix
-     */
-    public function testPrefixWhereToAlreadyHasThePrefix()
-    {
-        $this->channel->prefix = '+1';
-        $this->assertEquals('+1234567890', $this->channel->checkPrefix('+1234567890'));
-    }
-
-    /**
-     * @covers \NotificationChannels\ClickSend\ClickSendChannel::checkPrefix
-     */
-    public function testPrefixWhereToDoesNotHaveThePrefix()
-    {
-        $this->channel->prefix = '+1';
-        $this->assertEquals('+1234567890', $this->channel->checkPrefix('234567890'));
-    }
 }
 
 class TestNotifiable
@@ -143,11 +127,6 @@ class TestNotification extends Notification
 {
     public function toClickSend(): ClickSendMessage
     {
-        return new ClickSendMessage('to', 'message', 'from');
-    }
-
-    public function getMessage($message)
-    {
-        return (is_string($message)) ? $message : '';
+        return new ClickSendMessage('message');
     }
 }

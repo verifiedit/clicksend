@@ -54,15 +54,16 @@ class ClickSendApi
     }
 
     /**
+     * @param string $to
      * @param ClickSendMessage $message
      * @return array
      * @throws CouldNotSendNotification
      */
-    public function sendSms(ClickSendMessage $message): array
+    public function sendSms(string $to, ClickSendMessage $message): array
     {
         $data = [
-            'from' => $message->getFrom() ?? $this->smsFrom,
-            'to' => $message->getTo(),
+            'from' => $this->smsFrom,
+            'to' => $to,
             'body' => $message->getContent(),
         ];
 
