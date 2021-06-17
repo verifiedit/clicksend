@@ -35,14 +35,14 @@ class ClickSendServiceProvider extends ServiceProvider
     {
         $this->app->singleton(SMSApi::class, function () {
             $configuration = Configuration::getDefaultConfiguration()
-                ->setUsername($this->app['config']['clicksend.user_name'])
-                ->setPassword($this->app['config']['clicksend.api_key']);
+                ->setUsername($this->app['config']['clicksend.username'])
+                ->setPassword($this->app['config']['clicksend.apikey']);
 
             return new SMSApi(new Client(), $configuration);
         });
 
         $this->app->singleton(ClickSendApi::class, function (Application $app) {
-            return new ClickSendApi($app->make(SMSApi::class), $this->app['config']['clicksend.sms_from'], $this->app['config']['clicksend.driver']);
+            return new ClickSendApi($app->make(SMSApi::class), $this->app['config']['clicksend.sms-from'], $this->app['config']['clicksend.driver']);
         });
     }
 

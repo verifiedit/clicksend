@@ -37,14 +37,14 @@ class ClickSendApi
      * ClickSendApi constructor.
      *
      * @param SMSApi $api
-     * @param        $sms_from
+     * @param        $smsFrom
      * @param $driver
      * @throws CouldNotSendNotification
      */
-    public function __construct(SMSApi $api, $sms_from, $driver)
+    public function __construct(SMSApi $api, $smsFrom, $driver)
     {
         $this->api = $api;
-        $this->sms_from = $sms_from;
+        $this->sms_from = $smsFrom;
 
         if ($driver !== 'clicksend' && $driver !== 'log') {
             throw CouldNotSendNotification::driverError($driver);
