@@ -31,7 +31,7 @@ class ClickSendApi
     /**
      * @var string - default from config
      */
-    protected $sms_from;
+    protected $smsFrom;
 
     /**
      * ClickSendApi constructor.
@@ -44,7 +44,7 @@ class ClickSendApi
     public function __construct(SMSApi $api, $smsFrom, $driver)
     {
         $this->api = $api;
-        $this->sms_from = $smsFrom;
+        $this->smsFrom = $smsFrom;
 
         if ($driver !== 'clicksend' && $driver !== 'log') {
             throw CouldNotSendNotification::driverError($driver);
@@ -61,7 +61,7 @@ class ClickSendApi
     public function sendSms(ClickSendMessage $message): array
     {
         $data = [
-            'from' => $message->getFrom() ?? $this->sms_from,
+            'from' => $message->getFrom() ?? $this->smsFrom,
             'to' => $message->getTo(),
             'body' => $message->getContent(),
         ];

@@ -105,20 +105,18 @@ class ClickSendChannelTest extends MockeryTestCase
     }
 
     /**
-     * @test
      * @covers \NotificationChannels\ClickSend\ClickSendChannel::checkPrefix
      */
-    public function prefix_where_to_already_has_the_prefix()
+    public function testPrefixWhereToAlreadyHasThePrefix()
     {
         $this->channel->prefix = '+1';
         $this->assertEquals('+1234567890', $this->channel->checkPrefix('+1234567890'));
     }
 
     /**
-     * @test
      * @covers \NotificationChannels\ClickSend\ClickSendChannel::checkPrefix
      */
-    public function prefix_where_to_does_not_have_the_prefix()
+    public function testPrefixWhereToDoesNotHaveThePrefix()
     {
         $this->channel->prefix = '+1';
         $this->assertEquals('+1234567890', $this->channel->checkPrefix('234567890'));
