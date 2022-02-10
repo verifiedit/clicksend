@@ -48,7 +48,7 @@ class ClickSendChannel
      */
     public function send($notifiable, Notification $notification): array
     {
-        $to = $notifiable->routeNotificationForClickSend();
+        $to = $this->getTo($notifiable, $notification);
         $message = $this->getMessage($notifiable, $notification);
 
         $result = $this->client->sendSms($to, $message);
@@ -65,6 +65,30 @@ class ClickSendChannel
         }
 
         return $result;
+    }
+
+    /**
+     * Get the address to send a notification to.
+     *
+     * @param mixed $notifiable
+     * @param Notification|null $notification
+     *
+     * @return mixed
+     * @throws CouldNotSendNotification
+     */
+    protected function getTo($notifiable, $notification = null)
+    {
+        if ($notifiable->routeNotificationFor(self::class, $notification)) {
+            return $notifiable->routeNotificationFor(self::class, $notification);
+        }
+        if ($notifiable->routeNotificationFor('clicksend', $notification)) {
+            return $notifiable->routeNotificationFor('clicksend', $notification);
+        }
+        if (isset($notifiable->phone_number)) {
+            return $notifiable->phone_number;
+        }
+
+        throw CouldNotSendNotification::clickSendErrorMessage('Notification failed Invalid To');
     }
 
     /**
