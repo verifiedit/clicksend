@@ -25,20 +25,49 @@ This package makes it easy to send notifications using [ClickSend](https://www.c
 
 
 ## Installation
-
-Please also include the steps for any third-party service setup that's required for this package.
-
+You can install the package via composer:
+``` bash
+$ composer require verifiedit/laravel-notification-channel-clicksend
+```
 ### Setting up the ClickSend service
 
-Optionally include a few steps how users can set up the service.
+Add your ClikSend details to your .env:
+``` 
+CLICKSEND_DRIVER=clicksend
+CLICKSEND_ENABLED=true
+CLICKSEND_USERNAME=XYZ
+CLICKSEND_APIKEY=XYZ
+CLICKSEND_SMS_FROM=XYZ
+``` 
 
 ## Usage
+You can use the channel in your via() method inside the notification:
+``` php
+use NotificationChannels\ClickSend\ClickSendChannel;
+use NotificationChannels\ClickSend\ClickSendMessage;
+use Illuminate\Notifications\Notification;
 
-Some code examples, make it clear how to use the package
+class AccountApproved extends Notification
+{
+    public function via($notifiable)
+    {
+        return [ClickSendChannel::class];
+    }
 
-### Available Message methods
-
-A list of all available options
+    public function toClickSend($notifiable)
+    {
+        return (new ClickSendMessage())
+            ->setContent("Your {$notifiable->service} account was approved!");
+    }
+}
+``` 
+In order to let your Notification know which phone are you sending/calling to, the channel will look for the phone_number attribute of the Notifiable model. If you want to override this behaviour, add the routeNotificationForClickSend method to your Notifiable model.
+``` php
+public function routeNotificationForClickSend()
+{
+    return $this->phone_number;
+}
+```
 
 ## Changelog
 
