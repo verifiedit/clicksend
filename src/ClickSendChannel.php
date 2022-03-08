@@ -29,8 +29,8 @@ class ClickSendChannel
     /**
      * ClickSendChannel constructor.
      *
-     * @param ClickSendApi $client
-     * @param Dispatcher $events
+     * @param  ClickSendApi  $client
+     * @param  Dispatcher  $events
      */
     public function __construct(ClickSendApi $client, Dispatcher $events)
     {
@@ -39,8 +39,8 @@ class ClickSendChannel
     }
 
     /**
-     * @param mixed $notifiable
-     * @param Notification $notification
+     * @param  mixed  $notifiable
+     * @param  Notification  $notification
      *
      * @return array
      * @throws CouldNotSendNotification
@@ -70,10 +70,10 @@ class ClickSendChannel
     /**
      * Get the address to send a notification to.
      *
-     * @param mixed $notifiable
-     * @param Notification|null $notification
-     *
+     * @param  mixed  $notifiable
+     * @param  Notification|null  $notification
      * @return mixed
+     *
      * @throws CouldNotSendNotification
      */
     protected function getTo($notifiable, $notification = null)
@@ -81,9 +81,11 @@ class ClickSendChannel
         if ($notifiable->routeNotificationFor(self::class, $notification)) {
             return $notifiable->routeNotificationFor(self::class, $notification);
         }
+
         if ($notifiable->routeNotificationFor('clicksend', $notification)) {
             return $notifiable->routeNotificationFor('clicksend', $notification);
         }
+
         if (isset($notifiable->phone_number)) {
             return $notifiable->phone_number;
         }
@@ -93,8 +95,9 @@ class ClickSendChannel
 
     /**
      * @param $notifiable
-     * @param Notification $notification
+     * @param  Notification  $notification
      * @return ClickSendMessage
+     *
      * @throws Exception
      */
     public function getMessage($notifiable, Notification $notification): ClickSendMessage
@@ -103,12 +106,6 @@ class ClickSendChannel
             throw new Exception('The method toClickSend() does not exists on '.get_class($notification));
         }
 
-        $message = $notification->toClickSend($notifiable);
-
-        if (is_string($message)) {
-            $message = new ClickSendMessage($message);
-        }
-
-        return $message;
+        return $notification->toClickSend($notifiable);
     }
 }

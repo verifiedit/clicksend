@@ -105,10 +105,34 @@ class ClickSendChannelTest extends MockeryTestCase
 
         Mockery::mock(ClickSendApi::class, [Mockery::mock(SMSApi::class), 'from', 'bad']);
     }
+
+    public function testNotifiableWithAttribute()
+    {
+        $this->expectException(CouldNotSendNotification::class);
+
+        $this->api->shouldReceive('sendSms')
+            ->once()
+            ->withArgs(
+                function ($arg) {
+                    if ($arg instanceof ClickSendMessage) {
+                        return true;
+                    }
+                    if (is_string($arg)) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+
+        $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
+    }
 }
 
 class TestNotifiable
 {
+    public $phone_number = null;
+
     public function routeNotificationFor(): string
     {
         return '+1234567890';
@@ -117,9 +141,21 @@ class TestNotifiable
 
 class TestNotifiableWithoutRouteNotificationFor extends TestNotifiable
 {
+    public $phone_number = null;
+
     public function routeNotificationFor(): string
     {
-        return false;
+        return '';
+    }
+}
+
+class TestNotifiableWithAttribute extends TestNotifiable
+{
+    public $phone_number = '+1234567890';
+
+    public function routeNotificationFor(): string
+    {
+        return '';
     }
 }
 
