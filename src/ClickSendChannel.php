@@ -41,8 +41,8 @@ class ClickSendChannel
     /**
      * @param  mixed  $notifiable
      * @param  Notification  $notification
-     *
      * @return array
+     *
      * @throws CouldNotSendNotification
      * @throws Exception
      */

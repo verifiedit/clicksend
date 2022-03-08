@@ -34,7 +34,6 @@ class ClickSendMessage
 
     /**
      * @param  string  $content
-     *
      * @return ClickSendMessage
      */
     public function setContent(string $content): ClickSendMessage
