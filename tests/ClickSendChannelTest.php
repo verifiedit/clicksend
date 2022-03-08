@@ -109,7 +109,7 @@ class ClickSendChannelTest extends MockeryTestCase
 
 class TestNotifiable
 {
-    public function routeNotificationForClicksend(): string
+    public function routeNotificationFor(): string
     {
         return '+1234567890';
     }
@@ -117,7 +117,7 @@ class TestNotifiable
 
 class TestNotifiableWithoutRouteNotificationFor extends TestNotifiable
 {
-    public function routeNotificationFor(): bool
+    public function routeNotificationFor(): string
     {
         return false;
     }
