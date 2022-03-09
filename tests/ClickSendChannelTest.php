@@ -7,6 +7,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Notification;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -105,11 +106,59 @@ class ClickSendChannelTest extends MockeryTestCase
 
         Mockery::mock(ClickSendApi::class, [Mockery::mock(SMSApi::class), 'from', 'bad']);
     }
+
+    public function testNotifiableWithAttribute()
+    {
+        $this->expectException(CouldNotSendNotification::class);
+
+        $this->api->shouldReceive('sendSms')
+            ->once()
+            ->withArgs(
+                function ($arg) {
+                    if ($arg instanceof ClickSendMessage) {
+                        return true;
+                    }
+                    if (is_string($arg)) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+
+        $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
+    }
+
+    public function testNotifiableOnDemand()
+    {
+        $this->expectException(CouldNotSendNotification::class);
+
+        $this->api->shouldReceive('sendSms')
+            ->once()
+            ->withArgs(
+                function ($arg) {
+                    if ($arg instanceof ClickSendMessage) {
+                        return true;
+                    }
+                    if (is_string($arg)) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+
+        $notifiable = new AnonymousNotifiable();
+
+        $this->channel->send($notifiable->route('clicksend', '+1234567890'), new TestNotification());
+    }
 }
 
 class TestNotifiable
 {
-    public function routeNotificationForClicksend(): string
+    public $phone_number = null;
+
+    public function routeNotificationFor(): string
     {
         return '+1234567890';
     }
@@ -117,9 +166,21 @@ class TestNotifiable
 
 class TestNotifiableWithoutRouteNotificationFor extends TestNotifiable
 {
-    public function routeNotificationFor(): bool
+    public $phone_number = null;
+
+    public function routeNotificationFor(): string
     {
-        return false;
+        return '';
+    }
+}
+
+class TestNotifiableWithAttribute extends TestNotifiable
+{
+    public $phone_number = '+1234567890';
+
+    public function routeNotificationFor(): string
+    {
+        return '';
     }
 }
 

@@ -17,9 +17,9 @@ class ClickSendMessage
     private $from;
 
     /**
-     * @param string $content
+     * @param  string  $content
      */
-    public function __construct(string $content)
+    public function __construct(string $content = '')
     {
         $this->content = $content;
     }
@@ -33,8 +33,7 @@ class ClickSendMessage
     }
 
     /**
-     * @param string $content
-     *
+     * @param  string  $content
      * @return ClickSendMessage
      */
     public function setContent(string $content): ClickSendMessage
@@ -53,7 +52,7 @@ class ClickSendMessage
     }
 
     /**
-     * @param string $from
+     * @param  string  $from
      */
     public function setFrom(string $from): void
     {
