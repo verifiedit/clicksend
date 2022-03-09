@@ -7,6 +7,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Notification;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -126,6 +127,30 @@ class ClickSendChannelTest extends MockeryTestCase
             );
 
         $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
+    }
+
+    public function testNotifiableOnDemand()
+    {
+        $this->expectException(CouldNotSendNotification::class);
+
+        $this->api->shouldReceive('sendSms')
+            ->once()
+            ->withArgs(
+                function ($arg) {
+                    if ($arg instanceof ClickSendMessage) {
+                        return true;
+                    }
+                    if (is_string($arg)) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+
+        $notifiable = new AnonymousNotifiable();
+
+        $this->channel->send($notifiable->route('clicksend', '+1234567890'), new TestNotification());
     }
 }
 
