@@ -2,28 +2,33 @@
 
 namespace NotificationChannels\ClickSend;
 
-use ClickSend\Api\SMSApi;
-use ClickSend\Configuration;
-use GuzzleHttp\Client;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Verifiedit\ClicksendSms\ClicksendClient;
+use Verifiedit\ClicksendSms\SMS\SMS;
 
 class ClickSendServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
+     * @throws Exception
      */
     public function boot()
     {
+        if (!function_exists('config_path')) {
+            throw new Exception("Please install in a Laravel project to use this package.");
+        }
+
         $this->publishes(
             [
-                __DIR__.'/../config/clicksend.php' => config_path('clicksend.php'),
+                __DIR__ . '/../config/clicksend.php' => config_path('clicksend.php'),
             ],
             'config'
         );
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/clicksend.php',
+            __DIR__ . '/../config/clicksend.php',
             'clicksend'
         );
     }
@@ -33,16 +38,21 @@ class ClickSendServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(SMSApi::class, function () {
-            $configuration = Configuration::getDefaultConfiguration()
-                ->setUsername($this->app['config']['clicksend.username'])
-                ->setPassword($this->app['config']['clicksend.apikey']);
+        $this->app->singleton(SMS::class, function () {
+            $client = ClicksendClient::make(
+                $this->app['config']['clicksend.username'],
+                $this->app['config']['clicksend.apikey']
+            );
 
-            return new SMSApi(new Client(), $configuration);
+            return new SMS($client);
         });
 
         $this->app->singleton(ClickSendApi::class, function (Application $app) {
-            return new ClickSendApi($app->make(SMSApi::class), $this->app['config']['clicksend.sms-from'], $this->app['config']['clicksend.driver']);
+            return new ClickSendApi(
+                $app->make(SMS::class),
+                $this->app['config']['clicksend.sms-from'],
+                $this->app['config']['clicksend.driver']
+            );
         });
     }
 

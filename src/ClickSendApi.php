@@ -2,14 +2,16 @@
 
 namespace NotificationChannels\ClickSend;
 
-use ClickSend\Api\SMSApi;
-use ClickSend\ApiException;
-use ClickSend\Model\SmsMessage;
-use ClickSend\Model\SmsMessageCollection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use JetBrains\PhpStorm\ArrayShape;
 use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
 use Throwable;
+use Verifiedit\ClicksendSms\Exceptions\ClicksendApiException;
+use Verifiedit\ClicksendSms\SMS\Message;
+use Verifiedit\ClicksendSms\SMS\Messages;
+use Verifiedit\ClicksendSms\SMS\RecipientAlreadySetException;
+use Verifiedit\ClicksendSms\SMS\SMS;
 
 /**
  * Click Send API using ClickSend API wrapper.
@@ -21,27 +23,24 @@ class ClickSendApi
     /**
      * @var string
      */
-    public $driver;
+    public string $driver;
 
     /**
-     * @var SMSApi
+     * @var SMS
      */
-    private $api;
+    private SMS $api;
 
     /**
      * @var string - default from config
      */
-    protected $smsFrom;
+    protected string $smsFrom;
 
     /**
      * ClickSendApi constructor.
      *
-     * @param SMSApi $api
-     * @param        $smsFrom
-     * @param $driver
      * @throws CouldNotSendNotification
      */
-    public function __construct(SMSApi $api, $smsFrom, $driver)
+    public function __construct(SMS $api, string $smsFrom, string $driver)
     {
         $this->api = $api;
         $this->smsFrom = $smsFrom;
@@ -54,11 +53,10 @@ class ClickSendApi
     }
 
     /**
-     * @param string $to
-     * @param ClickSendMessage $message
-     * @return array
      * @throws CouldNotSendNotification
+     * @throws RecipientAlreadySetException
      */
+    #[ArrayShape(['success' => "bool", 'message' => "string", 'data' => "array"])]
     public function sendSms(string $to, ClickSendMessage $message): array
     {
         $from = $message->getFrom() ?? $this->smsFrom;
@@ -75,14 +73,15 @@ class ClickSendApi
             'data' => $data,
         ];
 
-        $payload = new SmsMessageCollection(['messages' => [new SmsMessage($data)]]);
+        $messages = new Messages();
+        $messages->add((new Message($message->getContent()))->setTo($to)->setFrom($from));
 
         if ($this->driver === 'log') {
             Log::debug(
                 'ClickSend SMS',
                 [
                     'data' => $data,
-                    'payload' => $payload,
+                    'payload' => $messages->toArray(),
                 ]
             );
             $result['success'] = true;
@@ -92,34 +91,26 @@ class ClickSendApi
         }
 
         try {
-            $response = json_decode($this->api->smsSendPost($payload), true);
+            $response = $this->api->send($messages);
 
-            if ($response['response_code'] != 'SUCCESS') {
+            $data = json_decode((string)$response->getBody(), true);
+
+            if ($data['response_code'] != 'SUCCESS') {
                 // communication error
-                throw CouldNotSendNotification::clickSendErrorMessage($response['response_msg']);
-            } elseif (Arr::get($response, 'data.messages.0.status') != 'SUCCESS') {
+                throw CouldNotSendNotification::clickSendErrorMessage($data['response_msg']);
+            } elseif (Arr::get($data, 'data.messages.0.status') != 'SUCCESS') {
                 // sending error
-                throw CouldNotSendNotification::clickSendErrorMessage(Arr::get($response, 'data.messages.0.status'));
+                throw CouldNotSendNotification::clickSendErrorMessage(Arr::get($data, 'data.messages.0.status'));
             } else {
                 $result['success'] = true;
                 $result['message'] = 'Message sent successfully.';
             }
-        } catch (APIException $e) {
+        } catch (ClicksendApiException $e) {
             throw CouldNotSendNotification::clickSendApiException($e);
         } catch (Throwable $e) {
             throw CouldNotSendNotification::genericError($e);
         }
 
         return $result;
-    }
-
-    /**
-     * Return Client for accessing all other api functions.
-     *
-     * @return SMSApi
-     */
-    public function getClient(): SMSApi
-    {
-        return $this->api;
     }
 }

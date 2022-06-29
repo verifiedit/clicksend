@@ -2,9 +2,9 @@
 
 namespace NotificationChannels\ClickSend\Exceptions;
 
-use ClickSend\ApiException;
 use Exception;
 use Throwable;
+use Verifiedit\ClicksendSms\Exceptions\ClicksendApiException;
 
 class CouldNotSendNotification extends Exception
 {
@@ -43,11 +43,11 @@ class CouldNotSendNotification extends Exception
     /**
      * Thrown when message status is not SUCCESS.
      *
-     * @param ApiException $e
+     * @param ClicksendApiException $e
      *
      * @return static
      */
-    public static function clickSendApiException(ApiException $e): CouldNotSendNotification
+    public static function clickSendApiException(ClicksendApiException $e): CouldNotSendNotification
     {
         return static::notificationError($e->getMessage());
     }
