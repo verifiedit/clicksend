@@ -12,23 +12,24 @@ class ClickSendServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
+     *
      * @throws Exception
      */
     public function boot()
     {
-        if (!function_exists('config_path')) {
-            throw new Exception("Please install in a Laravel project to use this package.");
+        if (! function_exists('config_path')) {
+            throw new Exception('Please install in a Laravel project to use this package.');
         }
 
         $this->publishes(
             [
-                __DIR__ . '/../config/clicksend.php' => config_path('clicksend.php'),
+                __DIR__.'/../config/clicksend.php' => config_path('clicksend.php'),
             ],
             'config'
         );
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/clicksend.php',
+            __DIR__.'/../config/clicksend.php',
             'clicksend'
         );
     }

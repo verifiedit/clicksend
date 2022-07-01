@@ -31,8 +31,7 @@ class CouldNotSendNotification extends Exception
     /**
      * ClickSend returned an error message.
      *
-     * @param string|null $message
-     *
+     * @param  string|null  $message
      * @return CouldNotSendNotification
      */
     public static function clickSendErrorMessage(?string $message): CouldNotSendNotification
@@ -43,8 +42,7 @@ class CouldNotSendNotification extends Exception
     /**
      * Thrown when message status is not SUCCESS.
      *
-     * @param ClicksendApiException $e
-     *
+     * @param  ClicksendApiException  $e
      * @return static
      */
     public static function clickSendApiException(ClicksendApiException $e): CouldNotSendNotification
@@ -53,8 +51,7 @@ class CouldNotSendNotification extends Exception
     }
 
     /**
-     * @param Throwable $e
-     *
+     * @param  Throwable  $e
      * @return CouldNotSendNotification
      */
     public static function genericError(Throwable $e): CouldNotSendNotification
@@ -68,8 +65,7 @@ class CouldNotSendNotification extends Exception
     }
 
     /**
-     * @param string $error
-     *
+     * @param  string  $error
      * @return CouldNotSendNotification
      */
     public static function notificationError(string $error): CouldNotSendNotification
@@ -83,7 +79,7 @@ class CouldNotSendNotification extends Exception
     }
 
     /**
-     * @param string $driver
+     * @param  string  $driver
      * @return CouldNotSendNotification
      */
     public static function driverError(string $driver): CouldNotSendNotification
