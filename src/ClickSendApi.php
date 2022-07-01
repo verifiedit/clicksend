@@ -56,7 +56,7 @@ class ClickSendApi
      * @throws CouldNotSendNotification
      * @throws RecipientAlreadySetException
      */
-    #[ArrayShape(['success' => "bool", 'message' => "string", 'data' => "array"])]
+    #[ArrayShape(['success' => 'bool', 'message' => 'string', 'data' => 'array'])]
     public function sendSms(string $to, ClickSendMessage $message): array
     {
         $from = $message->getFrom() ?? $this->smsFrom;
@@ -93,7 +93,7 @@ class ClickSendApi
         try {
             $response = $this->api->send($messages);
 
-            $data = json_decode((string)$response->getBody(), true);
+            $data = json_decode((string) $response->getBody(), true);
 
             if ($data['response_code'] != 'SUCCESS') {
                 // communication error
