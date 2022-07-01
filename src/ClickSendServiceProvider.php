@@ -25,7 +25,7 @@ class ClickSendServiceProvider extends ServiceProvider
             [
                 __DIR__.'/../config/clicksend.php' => config_path('clicksend.php'),
             ],
-            'config'
+            'clicksend-config'
         );
 
         $this->mergeConfigFrom(
@@ -51,7 +51,7 @@ class ClickSendServiceProvider extends ServiceProvider
         $this->app->singleton(ClickSendApi::class, function (Application $app) {
             return new ClickSendApi(
                 $app->make(SMS::class),
-                $this->app['config']['clicksend.sms-from'],
+                $this->app['config']['clicksend.from'],
                 $this->app['config']['clicksend.driver']
             );
         });
