@@ -29,8 +29,8 @@ class ClickSendChannel
     /**
      * ClickSendChannel constructor.
      *
-     * @param  ClickSendApi  $client
-     * @param  Dispatcher  $events
+     * @param ClickSendApi $client
+     * @param Dispatcher $events
      */
     public function __construct(ClickSendApi $client, Dispatcher $events)
     {
@@ -39,8 +39,8 @@ class ClickSendChannel
     }
 
     /**
-     * @param  mixed  $notifiable
-     * @param  Notification  $notification
+     * @param mixed $notifiable
+     * @param Notification $notification
      * @return array
      *
      * @throws CouldNotSendNotification
@@ -61,7 +61,7 @@ class ClickSendChannel
             $message = Arr::get($result, 'message');
 
             // by throwing exception NotificationSent event is not triggered and we trigger NotificationFailed above instead
-            throw CouldNotSendNotification::clickSendErrorMessage('Notification failed '.$message);
+            throw CouldNotSendNotification::clickSendErrorMessage('Notification failed ' . $message);
         }
 
         return $result;
@@ -70,8 +70,8 @@ class ClickSendChannel
     /**
      * Get the address to send a notification to.
      *
-     * @param  mixed  $notifiable
-     * @param  Notification|null  $notification
+     * @param mixed $notifiable
+     * @param Notification|null $notification
      * @return mixed
      *
      * @throws CouldNotSendNotification
@@ -95,15 +95,15 @@ class ClickSendChannel
 
     /**
      * @param $notifiable
-     * @param  Notification  $notification
+     * @param Notification $notification
      * @return ClickSendMessage
      *
      * @throws Exception
      */
     public function getMessage($notifiable, Notification $notification): ClickSendMessage
     {
-        if (! method_exists($notification, 'toClickSend')) {
-            throw new Exception('The method toClickSend() does not exists on '.get_class($notification));
+        if (!method_exists($notification, 'toClickSend')) {
+            throw new Exception('The method toClickSend() does not exists on ' . get_class($notification));
         }
 
         return $notification->toClickSend($notifiable);

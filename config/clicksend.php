@@ -9,7 +9,7 @@ return [
     /*
      * set to false to disable.
      */
-    'enabled'   => env('CLICKSEND_ENABLED', true),
+    'enabled' => env('CLICKSEND_ENABLED', true),
 
     /**
      * ClickSend username.
@@ -19,10 +19,10 @@ return [
     /**
      * ClickSend API Key.
      */
-    'apikey'   => env('CLICKSEND_APIKEY', ''),
+    'apikey' => env('CLICKSEND_APIKEY', ''),
 
     /**
      * ClickSend Send From.
      */
-    'from'  => env('CLICKSEND_SMS_FROM', ''),
+    'from' => env('CLICKSEND_SMS_FROM', ''),
 ];
