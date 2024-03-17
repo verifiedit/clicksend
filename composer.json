@@ -37,6 +37,8 @@
         }
     },
     "scripts": {
+        "pint": "./vendor/bin/pint",
+        "pint:test": "@pint --test",
         "test": "phpunit",
         "test:coverage": "phpunit --coverage-text --coverage-clover=coverage.clover"
     },
