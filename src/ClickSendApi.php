@@ -20,14 +20,8 @@ use Verifiedit\ClicksendSms\SMS\SMS;
  */
 class ClickSendApi
 {
-    /**
-     * @var string
-     */
     public string $driver;
 
-    /**
-     * @var SMS
-     */
     private SMS $api;
 
     /**

@@ -8,7 +8,7 @@ Please see [this repo](https://github.com/laravel-notification-channels/channels
 [![StyleCI](https://styleci.io/repos/377355997/shield)](https://styleci.io/repos/377355997)
 [![Total Downloads](https://img.shields.io/packagist/dt/verifiedit/laravel-notification-channel-clicksend.svg?style=flat-square)](https://packagist.org/packages/verifiedit/laravel-notification-channel-clicksend)
 
-This package makes it easy to send notifications using [ClickSend](https://www.clicksend.com/) with Laravel 5.5+, 6.x, 7.x and 8.x
+This package makes it easy to send notifications using [ClickSend](https://www.clicksend.com/) with Laravel 5.5+, 6.x, 7.x, 8.x, 9.x, 10.x and 11.x.
 
 ## Contents
 

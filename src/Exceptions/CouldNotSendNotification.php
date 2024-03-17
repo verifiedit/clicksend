@@ -20,9 +20,6 @@ class CouldNotSendNotification extends Exception
         );
     }
 
-    /**
-     * @return CouldNotSendNotification
-     */
     public static function missingRecipient(): CouldNotSendNotification
     {
         return static::notificationError('Missing recipient.');
@@ -30,9 +27,6 @@ class CouldNotSendNotification extends Exception
 
     /**
      * ClickSend returned an error message.
-     *
-     * @param  string|null  $message
-     * @return CouldNotSendNotification
      */
     public static function clickSendErrorMessage(?string $message): CouldNotSendNotification
     {
@@ -42,7 +36,6 @@ class CouldNotSendNotification extends Exception
     /**
      * Thrown when message status is not SUCCESS.
      *
-     * @param  ClicksendApiException  $e
      * @return static
      */
     public static function clickSendApiException(ClicksendApiException $e): CouldNotSendNotification
@@ -50,10 +43,6 @@ class CouldNotSendNotification extends Exception
         return static::notificationError($e->getMessage());
     }
 
-    /**
-     * @param  Throwable  $e
-     * @return CouldNotSendNotification
-     */
     public static function genericError(Throwable $e): CouldNotSendNotification
     {
         return new static(
@@ -64,10 +53,6 @@ class CouldNotSendNotification extends Exception
         );
     }
 
-    /**
-     * @param  string  $error
-     * @return CouldNotSendNotification
-     */
     public static function notificationError(string $error): CouldNotSendNotification
     {
         return new static(
@@ -78,10 +63,6 @@ class CouldNotSendNotification extends Exception
         );
     }
 
-    /**
-     * @param  string  $driver
-     * @return CouldNotSendNotification
-     */
     public static function driverError(string $driver): CouldNotSendNotification
     {
         return new static(
