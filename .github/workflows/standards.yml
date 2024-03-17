@@ -1,4 +1,4 @@
-name: Standards tests
+name: Standards
 
 on:
   - push
