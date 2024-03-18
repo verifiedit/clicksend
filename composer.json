@@ -14,7 +14,7 @@
     "require": {
         "php": ">=8.0",
         "ext-json": "*",
-        "verifiedit/clicksend-sms": "^0.2 || ^0.3",
+        "verifiedit/clicksend-sms": "^0.2 || ^0.3 || ^1.0",
         "illuminate/config": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
         "illuminate/events": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
         "illuminate/notifications": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
