@@ -2,6 +2,14 @@
 
 All notable changes to `clicksend` will be documented in this file.
 
+## 2.4.0
+**Released:** Mar 24, 2026
+
+- Added support for Laravel 13
+- Added tests for PHP 8.5
+- Check standards for PHP 8.5 and Laravel 13
+- Added this fancy changelog 
+
 ## 2.3.0
 **Released:** Mar 3, 2025
 
