@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.0, 8.1, 8.2, 8.3, 8.4, 8.5]
+        php: [8.3, 8.4, 8.5]
 
     name: Tests (PHP ${{ matrix.php }})
 
@@ -32,4 +32,4 @@ jobs:
         run: composer update --prefer-source --no-interaction --no-progress
 
       - name: Execute tests
-        run: vendor/bin/phpunit --verbose
+        run: composer run test

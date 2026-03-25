@@ -67,7 +67,7 @@ class ClickSendApi
             'data' => $data,
         ];
 
-        $messages = new Messages();
+        $messages = new Messages;
         $messages->add((new Message($message->getContent()))->setTo($to)->setFrom($from));
 
         if ($this->driver === 'log') {

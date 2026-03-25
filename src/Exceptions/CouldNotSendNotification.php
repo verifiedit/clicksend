@@ -28,7 +28,7 @@ class CouldNotSendNotification extends Exception
     /**
      * ClickSend returned an error message.
      */
-    public static function clickSendErrorMessage(?string $message): CouldNotSendNotification
+    public static function clickSendErrorMessage(?string $message = null): CouldNotSendNotification
     {
         return static::notificationError($message ?? 'No message.');
     }

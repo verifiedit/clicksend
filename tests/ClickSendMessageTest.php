@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class ClickSendMessageTest extends TestCase
 {
-    public function testCreateInstance()
+    public function test_create_instance()
     {
         $message = new ClickSendMessage('message');
 
         $this->assertEquals('message', $message->getContent());
     }
 
-    public function testCanSetFromOnMessage()
+    public function test_can_set_from_on_message()
     {
         $message = new ClickSendMessage('message');
         $message->setFrom('from');
@@ -22,7 +22,7 @@ class ClickSendMessageTest extends TestCase
         $this->assertEquals('from', $message->getFrom());
     }
 
-    public function testFromSetToNullByDefault()
+    public function test_from_set_to_null_by_default()
     {
         $message = new ClickSendMessage('message');
 
