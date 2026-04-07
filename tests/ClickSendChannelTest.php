@@ -12,7 +12,6 @@ use NotificationChannels\ClickSend\ClickSendApi;
 use NotificationChannels\ClickSend\ClickSendChannel;
 use NotificationChannels\ClickSend\ClickSendMessage;
 use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Verifiedit\ClicksendSms\SMS\SMS;
 
@@ -29,7 +28,7 @@ class ClickSendChannelTest extends TestCase
     {
         parent::setUp();
 
-        $app = new Container;
+        $app = new Container();
         $app->singleton('app', 'Illuminate\Container\Container');
         $app->singleton(
             'events',
@@ -69,9 +68,9 @@ class ClickSendChannelTest extends TestCase
             ->with($this->callback(function ($arg) {
                 return $arg instanceof ClickSendMessage || is_string($arg);
             }))
-            ->willThrowException(new CouldNotSendNotification);
+            ->willThrowException(new CouldNotSendNotification());
 
-        $this->channel->send(new TestNotifiable, new TestNotification);
+        $this->channel->send(new TestNotifiable(), new TestNotification());
     }
 
     /**
@@ -83,9 +82,9 @@ class ClickSendChannelTest extends TestCase
 
         $this->api->expects($this->atMost(1))
             ->method('sendSms')
-            ->willThrowException(new CouldNotSendNotification);
+            ->willThrowException(new CouldNotSendNotification());
 
-        $this->channel->send(new TestNotifiableWithoutRouteNotificationFor, new TestNotification);
+        $this->channel->send(new TestNotifiableWithoutRouteNotificationFor(), new TestNotification());
     }
 
     public function test_bad_driver()
@@ -108,9 +107,9 @@ class ClickSendChannelTest extends TestCase
             ->with($this->callback(function ($arg) {
                 return $arg instanceof ClickSendMessage || is_string($arg);
             }))
-            ->willThrowException(new CouldNotSendNotification);
+            ->willThrowException(new CouldNotSendNotification());
 
-        $this->channel->send(new TestNotifiableWithAttribute, new TestNotification);
+        $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
     }
 
     public function test_notifiable_on_demand()
@@ -122,11 +121,11 @@ class ClickSendChannelTest extends TestCase
             ->with($this->callback(function ($arg) {
                 return $arg instanceof ClickSendMessage || is_string($arg);
             }))
-            ->willThrowException(new CouldNotSendNotification);
+            ->willThrowException(new CouldNotSendNotification());
 
-        $notifiable = new AnonymousNotifiable;
+        $notifiable = new AnonymousNotifiable();
 
-        $this->channel->send($notifiable->route('clicksend', '+1234567890'), new TestNotification);
+        $this->channel->send($notifiable->route('clicksend', '+1234567890'), new TestNotification());
     }
 }
 
