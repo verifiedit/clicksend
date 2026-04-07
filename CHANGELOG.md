@@ -2,6 +2,12 @@
 
 All notable changes to `clicksend` will be documented in this file.
 
+## 3.0.0
+**Released:** Apr 7, 2026
+
+- Removed support for Laravel 9 and below
+- Removed support for PHP 8.2 and below
+
 ## 2.4.0
 **Released:** Mar 24, 2026
 
