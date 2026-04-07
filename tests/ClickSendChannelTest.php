@@ -12,14 +12,16 @@ use NotificationChannels\ClickSend\ClickSendApi;
 use NotificationChannels\ClickSend\ClickSendChannel;
 use NotificationChannels\ClickSend\ClickSendMessage;
 use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
+use PHPUnit\Framework\Constraint\IsType;
+use PHPUnit\Framework\NativeType;
 use PHPUnit\Framework\TestCase;
 use Verifiedit\ClicksendSms\SMS\SMS;
 
 class ClickSendChannelTest extends TestCase
 {
-    private $api;
+    private ClickSendApi $api;
 
-    private $channel;
+    private ClickSendChannel $channel;
 
     /**
      * @throws BindingResolutionException
@@ -65,9 +67,12 @@ class ClickSendChannelTest extends TestCase
 
         $this->api->expects($this->once())
             ->method('sendSms')
-            ->with($this->callback(function ($arg) {
-                return $arg instanceof ClickSendMessage || is_string($arg);
-            }))
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(function ($arg) {
+                    return $arg instanceof ClickSendMessage || is_string($arg);
+                })
+            )
             ->willThrowException(new CouldNotSendNotification());
 
         $this->channel->send(new TestNotifiable(), new TestNotification());
@@ -104,9 +109,14 @@ class ClickSendChannelTest extends TestCase
 
         $this->api->expects($this->once())
             ->method('sendSms')
-            ->with($this->callback(function ($arg) {
-                return $arg instanceof ClickSendMessage || is_string($arg);
-            }))
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(
+                    function ($arg) {
+                        return $arg instanceof ClickSendMessage || is_string($arg);
+                    }
+                )
+            )
             ->willThrowException(new CouldNotSendNotification());
 
         $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
@@ -118,9 +128,12 @@ class ClickSendChannelTest extends TestCase
 
         $this->api->expects($this->once())
             ->method('sendSms')
-            ->with($this->callback(function ($arg) {
-                return $arg instanceof ClickSendMessage || is_string($arg);
-            }))
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(function ($arg) {
+                    return $arg instanceof ClickSendMessage || is_string($arg);
+                })
+            )
             ->willThrowException(new CouldNotSendNotification());
 
         $notifiable = new AnonymousNotifiable();
