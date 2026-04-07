@@ -12,6 +12,7 @@ use NotificationChannels\ClickSend\ClickSendApi;
 use NotificationChannels\ClickSend\ClickSendChannel;
 use NotificationChannels\ClickSend\ClickSendMessage;
 use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Verifiedit\ClicksendSms\SMS\SMS;
 
@@ -48,9 +49,9 @@ class ClickSendChannelTest extends TestCase
             }
         );
 
-        $smsMock = $this->createMock(SMS::class);
+        $smsStub = $this->createStub(SMS::class);
         $this->api = $this->getMockBuilder(ClickSendApi::class)
-            ->setConstructorArgs([$smsMock, 'from', 'clicksend'])
+            ->setConstructorArgs([$smsStub, 'from', 'clicksend'])
             ->onlyMethods(['sendSms'])
             ->getMock();
         $this->channel = new ClickSendChannel($this->api, $app->make('events'));
@@ -91,10 +92,11 @@ class ClickSendChannelTest extends TestCase
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        $smsMock = $this->createMock(SMS::class);
-        $this->getMockBuilder(ClickSendApi::class)
-            ->setConstructorArgs([$smsMock, 'from', 'bad'])
-            ->getMock();
+        // Add expectation for mock created in setUp, even though we don't use it
+        $this->api->expects($this->never())->method('sendSms');
+
+        $smsStub = $this->createStub(SMS::class);
+        new ClickSendApi($smsStub, 'from', 'bad');
     }
 
     public function test_notifiable_with_attribute()
