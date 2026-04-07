@@ -8,15 +8,16 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Notification;
-use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use NotificationChannels\ClickSend\ClickSendApi;
 use NotificationChannels\ClickSend\ClickSendChannel;
 use NotificationChannels\ClickSend\ClickSendMessage;
 use NotificationChannels\ClickSend\Exceptions\CouldNotSendNotification;
+use PHPUnit\Framework\Constraint\IsType;
+use PHPUnit\Framework\NativeType;
+use PHPUnit\Framework\TestCase;
 use Verifiedit\ClicksendSms\SMS\SMS;
 
-class ClickSendChannelTest extends MockeryTestCase
+class ClickSendChannelTest extends TestCase
 {
     private ClickSendApi $api;
 
@@ -25,7 +26,7 @@ class ClickSendChannelTest extends MockeryTestCase
     /**
      * @throws BindingResolutionException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,32 +50,30 @@ class ClickSendChannelTest extends MockeryTestCase
             }
         );
 
-        $api = Mockery::mock(SMS::class);
-        $this->api = Mockery::mock(ClickSendApi::class, [$api, 'from', 'clicksend']);
+        $smsStub = $this->createStub(SMS::class);
+        $this->api = $this->getMockBuilder(ClickSendApi::class)
+            ->setConstructorArgs([$smsStub, 'from', 'clicksend'])
+            ->onlyMethods(['sendSms'])
+            ->getMock();
         $this->channel = new ClickSendChannel($this->api, $app->make('events'));
     }
 
     /**
      * @throws CouldNotSendNotification
      */
-    public function testChannelCallsApi()
+    public function test_channel_calls_api()
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        $this->api->shouldReceive('sendSms')
-            ->once()
-            ->withArgs(
-                function ($arg) {
-                    if ($arg instanceof ClickSendMessage) {
-                        return true;
-                    }
-                    if (is_string($arg)) {
-                        return true;
-                    }
-
-                    return false;
-                }
-            );
+        $this->api->expects($this->once())
+            ->method('sendSms')
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(function ($arg) {
+                    return $arg instanceof ClickSendMessage || is_string($arg);
+                })
+            )
+            ->willThrowException(new CouldNotSendNotification());
 
         $this->channel->send(new TestNotifiable(), new TestNotification());
     }
@@ -82,65 +81,60 @@ class ClickSendChannelTest extends MockeryTestCase
     /**
      * @throws CouldNotSendNotification
      */
-    public function testDoesNotSendSmsWhenMissingRecipient()
+    public function test_does_not_send_sms_when_missing_recipient()
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        $this->api->shouldReceive('sendSms')
-            ->atMost()
-            ->once()
-            ->andThrow(CouldNotSendNotification::class);
+        $this->api->expects($this->atMost(1))
+            ->method('sendSms')
+            ->willThrowException(new CouldNotSendNotification());
 
         $this->channel->send(new TestNotifiableWithoutRouteNotificationFor(), new TestNotification());
     }
 
-    public function testBadDriver()
+    public function test_bad_driver()
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        Mockery::mock(ClickSendApi::class, [Mockery::mock(SMS::class), 'from', 'bad']);
+        // Add expectation for mock created in setUp, even though we don't use it
+        $this->api->expects($this->never())->method('sendSms');
+
+        $smsStub = $this->createStub(SMS::class);
+        new ClickSendApi($smsStub, 'from', 'bad');
     }
 
-    public function testNotifiableWithAttribute()
+    public function test_notifiable_with_attribute()
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        $this->api->shouldReceive('sendSms')
-            ->once()
-            ->withArgs(
-                function ($arg) {
-                    if ($arg instanceof ClickSendMessage) {
-                        return true;
+        $this->api->expects($this->once())
+            ->method('sendSms')
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(
+                    function ($arg) {
+                        return $arg instanceof ClickSendMessage || is_string($arg);
                     }
-                    if (is_string($arg)) {
-                        return true;
-                    }
-
-                    return false;
-                }
-            );
+                )
+            )
+            ->willThrowException(new CouldNotSendNotification());
 
         $this->channel->send(new TestNotifiableWithAttribute(), new TestNotification());
     }
 
-    public function testNotifiableOnDemand()
+    public function test_notifiable_on_demand()
     {
         $this->expectException(CouldNotSendNotification::class);
 
-        $this->api->shouldReceive('sendSms')
-            ->once()
-            ->withArgs(
-                function ($arg) {
-                    if ($arg instanceof ClickSendMessage) {
-                        return true;
-                    }
-                    if (is_string($arg)) {
-                        return true;
-                    }
-
-                    return false;
-                }
-            );
+        $this->api->expects($this->once())
+            ->method('sendSms')
+            ->with(
+                new IsType(NativeType::String),
+                $this->callback(function ($arg) {
+                    return $arg instanceof ClickSendMessage || is_string($arg);
+                })
+            )
+            ->willThrowException(new CouldNotSendNotification());
 
         $notifiable = new AnonymousNotifiable();
 
